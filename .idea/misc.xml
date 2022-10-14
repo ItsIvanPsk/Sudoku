@@ -3,7 +3,10 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
-        <entry key="..\:/Sudoku/app/src/main/res/layout/activity_main.xml" value="0.39895833333333336" />
+        <entry key="..\:/Sudoku/app/src/main/res/drawable/customborder.xml" value="0.103" />
+        <entry key="..\:/Sudoku/app/src/main/res/layout/activity_main.xml" value="0.1" />
+        <entry key="..\:/Sudoku/app/src/main/res/layout/item_spinner.xml" value="0.22" />
+        <entry key="..\:/Sudoku/app/src/main/res/layout/spinner_item.xml" value="0.1984375" />
       </map>
     </option>
   </component>
