@@ -11,7 +11,9 @@
         <item>8</item>
         <item>9</item>
     </string-array>
+
     <item name="row" type="id" />
     <item name="col" type="id" />
     <item name="block" type="id" />
+
 </resources>

@@ -25,12 +25,20 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
     int rows = 9;
     TableLayout table;
     static ArrayList<String> spinnerArray = new ArrayList<String>();
+    Spinner[][] spinners = new Spinner[9][9];
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         table = findViewById(R.id.table);
+
+        fillNumbers();
         createTable();
+
+        SudokuModel sm = new SudokuModel();
+        sm.generateVoidSudoku();
+
+        Log.i("5", "MSG BEFORE");
 
     }
 
@@ -50,36 +58,35 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
     }
 
     public void createTable(){
-        fillNumbers();
         int row = 0;
         int col = 0;
         int block = 0;
         for (row = 0; row < rows; row++){
-            TableRow tr = new TableRow(this);
+            TableRow tr = new TableRow(MainActivity.this);
             for (col = 0; col < cols; col++) {
-                Spinner spinner = new Spinner(this);
+                Spinner spinner = new Spinner(MainActivity.this);
                 spinner.setBackgroundColor(Color.LTGRAY);
                 spinner.setBackgroundResource(R.drawable.customborder);
+                spinner.setOnItemSelectedListener(this);
                 ArrayAdapter<String> spinnerArrayAdapter = new ArrayAdapter<String>(this, R.layout.spinner_item, spinnerArray);
                 spinner.setAdapter(spinnerArrayAdapter);
                 spinner.setTag(R.id.row,row);
                 spinner.setTag(R.id.col,col);
                 spinner.setTag(R.id.block,block);
-                spinner.setOnItemSelectedListener(this);
                 if(row % 3 == 0 && col % 9 == 0)
                 {
-                    TableRow espacio = new TableRow(this);
-                    TextView esp = new TextView(this);
+                    TableRow espacio = new TableRow(MainActivity.this);
+                    TextView esp = new TextView(MainActivity.this);
                     espacio.addView(esp);
                     table.addView(espacio);
                 }
-                if(col % 3 == 0 && col != 0)
+                if(col % 3 == 0 && col != 0 && col != cols)
                 {
-                    System.out.println("Columnas");
-                    TextView esp = new TextView(this);
+                    TextView esp = new TextView(MainActivity.this);
                     esp.setText("     ");
                     tr.addView(esp);
                 }
+                spinners[row][col] = spinner;
                 tr.addView(spinner);
 
             }
@@ -87,32 +94,18 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         }
     }
 
-    public int getVal(int row, int col){
-        Spinner sp = findViewById(R.id.col);
-        return 0;
-    }
-    public void setVal(int val) {
-
-    }
-    public void checkRow(int row){
-
-    }
-    public void checkCol(int col){
-
-    }
-    public void checkBlock(int block){
-
-    }
-    public void startGame(){
-
-    }
-
 
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int pos,long id) {
-        Log.i("5", "Aips");
+        String row = (String) view.getTag(0);
+        String col = (String) view.getTag();
+        String block = (String) view.getTag();
+        System.out.println("ROW: " + row);
+
     }
     @Override
     public void onNothingSelected(AdapterView<?> arg0) {
+
     }
+
 }
