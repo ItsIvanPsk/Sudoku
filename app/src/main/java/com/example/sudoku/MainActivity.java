@@ -25,7 +25,8 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
     int rows = 9;
     TableLayout table;
     static ArrayList<String> spinnerArray = new ArrayList<String>();
-    Spinner[][] spinners = new Spinner[9][9];
+    static  Spinner[][] spinners = new Spinner[9][9];
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -72,7 +73,6 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
                 spinner.setAdapter(spinnerArrayAdapter);
                 spinner.setTag(R.id.row,row);
                 spinner.setTag(R.id.col,col);
-                spinner.setTag(R.id.block,block);
                 if(row % 3 == 0 && col % 9 == 0)
                 {
                     TableRow espacio = new TableRow(MainActivity.this);
@@ -91,21 +91,29 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
 
             }
             table.addView(tr);
+            refrescaGUI();
         }
     }
 
+    @Override
+    public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+        int row = (int) adapterView.getTag(R.id.row);
+        int col = (int) adapterView.getTag(R.id.col);
+        System.out.println("ROW: " + row);
+        System.out.println("COL: " + col);
+    }
 
     @Override
-    public void onItemSelected(AdapterView<?> parent, View view, int pos,long id) {
-        String row = (String) view.getTag(0);
-        String col = (String) view.getTag();
-        String block = (String) view.getTag();
-        System.out.println("ROW: " + row);
+    public void onNothingSelected(AdapterView<?> adapterView) {
 
     }
-    @Override
-    public void onNothingSelected(AdapterView<?> arg0) {
 
+    public void genNewGame(){
+        SudokuModel.generateNewGame();
+    }
+
+    public void refrescaGUI(){
+        spinners[0][0].setSelection(4);
     }
 
 }

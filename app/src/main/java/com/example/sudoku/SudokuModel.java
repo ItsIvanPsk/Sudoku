@@ -18,8 +18,6 @@ public class SudokuModel extends AppCompatActivity {
 
         sudoku = generateVoidSudoku();
         showSudokuMatrix(sudoku);
-
-
     }
 
 
@@ -41,24 +39,28 @@ public class SudokuModel extends AppCompatActivity {
         }
     }
 
-    public int getVal(int row, int col){
+    private static int getVal(int row, int col){
         return sudoku[row][col];
     }
-    public void setVal(int row, int col, int value) {
+
+    private static void setVal(int row, int col, int value) {
         sudoku[row][col] = value;
     }
-    public static boolean checkRow(int rowNum){
-        int[] rowValues = getRowValues(rowNum);
-        boolean valid = true;
-        for(int row = 0; row  < 9-1; row++){
-            if(rowValues[row] == rowValues[rowNum + 1]){
-                System.out.println("No valido!");
-                valid = false;
-                return valid;
+
+    private static boolean checkRow(int col) {
+        for (int j = 0; j < 8; j++) {
+            if (sudoku[j][col] == 0) {
+                continue;
+            }
+            for (int k = j + 1; k < 9; k++) {
+                if (sudoku[j][col] == sudoku[k][col]) {
+                    return false;
+                }
             }
         }
-        return valid;
+        return true;
     }
+
     public static boolean checkCol(int colNum){
         int[] colValues = getColValues(colNum);
         boolean valid = true;
@@ -72,10 +74,9 @@ public class SudokuModel extends AppCompatActivity {
         return valid;
     }
 
-    public static boolean checkBlock(int row, int col){
+    private static boolean checkBlock(int row, int col) {
         int j = row / 3 * 3;
         int k = col / 3 * 3;
-
         for (int i = 0; i < 8; i++) {
             if (sudoku[j + i / 3][k + i % 3] == 0) {
                 continue;
@@ -89,7 +90,23 @@ public class SudokuModel extends AppCompatActivity {
         return true;
     }
 
-    public static int[][] generateShuDu(){
+    public static int[][] generateNewGame() {
+        int[][] newGame = generateSolvedSudoku();
+        int cantNumbers = 15;
+
+        while (cantNumbers == 0){
+            int randomCol = (int) Math.random() * 9;
+            int randomRow = (int) Math.random() * 9;
+            int randomNum = (int) Math.random() * num.length;
+
+            setVal(randomRow, randomCol, randomNum);
+
+            cantNumbers--;
+        }
+        return newGame;
+    }
+
+        public static int[][] generateSolvedSudoku(){
         for (int i = 0; i < 9; i++) {
             int time = 0;
             for (int j = 0; j < 9; j++) {
@@ -108,7 +125,7 @@ public class SudokuModel extends AppCompatActivity {
                     }
                 }
                 // Llenado exitosamente
-                if (isCorret(i, j)) {
+                if (checkSudoku(i, j)) {
                     // Inicializa el tiempo para prepararte para el próximo llenado
                     time = 0;
                 } else {// continuar llenando
@@ -140,7 +157,7 @@ public class SudokuModel extends AppCompatActivity {
         return num[8 - time];
     }
 
-    private static boolean isCorret(int row, int col) {
+    private static boolean checkSudoku(int row, int col) {
         return (checkRow(row) & checkCol(col) & checkBlock(row, col));
     }
 
@@ -167,10 +184,7 @@ public class SudokuModel extends AppCompatActivity {
         }
         return rowValue;
     }
-    public int[][] getBlockValues(int[][] block){
-        int[][] blockValues = new int[3][3];
 
-        return blockValues;
-    }
+
 
 }
