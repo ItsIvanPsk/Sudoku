@@ -9,52 +9,47 @@ import java.util.Random;
 public class SudokuModel extends AppCompatActivity {
 
     static int[][] sudoku = new int[9][9];
-    static int[][] solvedSudoku = new int[9][9];
     private static int[] num = { 1, 2, 3, 4, 5, 6, 7, 8, 9 };
 
     public static int getVal(int row, int col){
         return sudoku[row][col];
     }
 
-    public static void setVal(int row, int col, int value) {
-        sudoku[row][col] = value;
+    public static boolean setVal(int row, int col, int value) {
+        int prev_value = sudoku[row][col];
+        System.out.println("IS CORRECT -> " + isCorret(row, col));
+        if (isCorret(row, col)){
+            sudoku[row][col] = prev_value;
+            return false;
+        } else {
+            sudoku[row][col] = value;
+            return true;
+        }
     }
 
     public static void generateShuDu(){
-        // generar números
         for (int i = 0; i < 9; i++) {
-            // número de intentos de llenar
             int time = 0;
-            // completa los números
             for (int j = 0; j < 9; j++) {
-                // generar números
                 sudoku[i][j] = generateNum(time);
-                // Si el valor de retorno es 0, significa que está atascado y devuelto para su procesamiento
-                // El principio del procesamiento de devolución es: si no es la primera columna, volverá primero a la columna anterior; de lo contrario, volverá a la última columna de la línea anterior.
                 if (sudoku[i][j] == 0) {
-                    // no la primera columna, retrocede una columna
                     if (j > 0) {
                         j -= 2;
                         continue;
-                    } else {// es la primera columna, luego retrocede a la última columna de la línea anterior
+                    } else {
                         i--;
                         j = 8;
                         continue;
                     }
                 }
-                // Llenado exitosamente
                 if (isCorret(i, j)) {
-                    // Inicializa el tiempo para prepararte para el próximo llenado
                     time = 0;
-                } else {// continuar llenando
-                    // Incrementa el número en 1
+                } else {
                     time++;
-                    // continúa llenando la celda actual
                     j--;
                 }
             }
         }
-        // solvedSudoku = sudoku;
         Log.i("55555", "The sudoku has been generated!");
     }
 

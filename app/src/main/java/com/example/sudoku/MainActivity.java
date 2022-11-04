@@ -9,6 +9,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.GridLayout;
 import android.widget.LinearLayout;
 import android.widget.Space;
@@ -18,7 +19,10 @@ import android.widget.TableRow;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.time.Duration;
 import java.util.ArrayList;
+
+import kotlin.Unit;
 
 public class MainActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
     int cols = 9;
@@ -32,16 +36,23 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        table = findViewById(R.id.table);
+
+        table = findViewById(R.id.sudoku__table);
+        Button btn = findViewById(R.id.sudoku__button_regen);
 
         fillNumbers();
-
         sm.generateShuDu();
-        Integer s = sm.getVal(0,0);
-        Log.i("55s", s.toString());
-
-        Log.i("5", "MSG BEFORE");
         createTable();
+
+        btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Log.i("55", "regenerated!");
+                sm.generateShuDu();
+                refrescaGUI();
+            }
+        });
+
     }
 
     public static void fillNumbers()
@@ -62,7 +73,6 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
     public void createTable(){
         int row = 0;
         int col = 0;
-        int block = 0;
         for (row = 0; row < rows; row++){
             TableRow tr = new TableRow(MainActivity.this);
             for (col = 0; col < cols; col++) {
@@ -74,6 +84,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
                 spinner.setAdapter(spinnerArrayAdapter);
                 spinner.setTag(R.id.row,row);
                 spinner.setTag(R.id.col,col);
+                spinner.setTag("bug init");
                 if(row % 3 == 0 && col % 9 == 0)
                 {
                     TableRow espacio = new TableRow(MainActivity.this);
@@ -98,10 +109,27 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
 
     @Override
     public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-        int row = (int) adapterView.getTag(R.id.row);
-        int col = (int) adapterView.getTag(R.id.col);
-        System.out.println("ROW: " + row);
-        System.out.println("COL: " + col);
+        if (adapterView.getTag().equals("bug init")) {
+            adapterView.setTag("okay, no more bug");
+        }
+        else {
+            if (!(adapterView.getSelectedItem().toString() == " ")){
+                if ( sm.setVal(
+                        (int) adapterView.getTag(R.id.row),
+                        (int) adapterView.getTag(R.id.col),
+                        Integer.parseInt(adapterView.getSelectedItem().toString())
+                )){
+                    genToast("Correct number");
+                } else {
+                    genToast("Incorrect number");
+                }
+                refrescaGUI();
+            }
+        }
+    }
+
+    public void genToast(String message) {
+        Toast.makeText(getApplicationContext(), message.toString(), Toast.LENGTH_LONG).show();
     }
 
     @Override
@@ -111,16 +139,12 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
 
     public void refrescaGUI(){
         for(int i = 0; i < 9;i++){
-            System.out.println("-------------");
             for(int j = 0; j < 9;j++){
                 Integer num = sm.getVal(i, j);
-                Log.i("5s", num.toString());
                 spinners[i][j].setSelection(sm.getVal(i, j));
                 // spinners[i][j].setEnabled(false);
             }
         }
-        System.out.println("####################################");
-
     }
 
 }
