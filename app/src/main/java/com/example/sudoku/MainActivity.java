@@ -26,6 +26,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
     TableLayout table;
     static ArrayList<String> spinnerArray = new ArrayList<String>();
     static  Spinner[][] spinners = new Spinner[9][9];
+    SudokuModel sm = new SudokuModel();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,13 +35,13 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         table = findViewById(R.id.table);
 
         fillNumbers();
-        createTable();
 
-        SudokuModel sm = new SudokuModel();
-        sm.generateVoidSudoku();
+        sm.generateShuDu();
+        Integer s = sm.getVal(0,0);
+        Log.i("55s", s.toString());
 
         Log.i("5", "MSG BEFORE");
-
+        createTable();
     }
 
     public static void fillNumbers()
@@ -91,9 +92,8 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
 
             }
             table.addView(tr);
-            SudokuModel.generateSolvedSudoku();
-            refrescaGUI();
         }
+        refrescaGUI();
     }
 
     @Override
@@ -109,18 +109,17 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
 
     }
 
-    public void genNewGame(){
-        SudokuModel.generateNewGame();
-    }
-
     public void refrescaGUI(){
-        int[][] sudokuModel = SudokuModel.sudoku;
-        for(int i = 0; i < sudokuModel.length;i++){
-            for(int j = 0; j < sudokuModel[i].length;j++){
-                spinners[i][j].setSelection(0);
-                spinners[i][j].setEnabled(false);
+        for(int i = 0; i < 9;i++){
+            System.out.println("-------------");
+            for(int j = 0; j < 9;j++){
+                Integer num = sm.getVal(i, j);
+                Log.i("5s", num.toString());
+                spinners[i][j].setSelection(sm.getVal(i, j));
+                // spinners[i][j].setEnabled(false);
             }
         }
+        System.out.println("####################################");
 
     }
 
