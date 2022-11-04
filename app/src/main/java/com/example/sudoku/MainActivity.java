@@ -91,6 +91,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
 
             }
             table.addView(tr);
+            SudokuModel.generateSolvedSudoku();
             refrescaGUI();
         }
     }
@@ -113,7 +114,14 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
     }
 
     public void refrescaGUI(){
-        spinners[0][0].setSelection(4);
+        int[][] sudokuModel = SudokuModel.sudoku;
+        for(int i = 0; i < sudokuModel.length;i++){
+            for(int j = 0; j < sudokuModel[i].length;j++){
+                spinners[i][j].setSelection(0);
+                spinners[i][j].setEnabled(false);
+            }
+        }
+
     }
 
 }
