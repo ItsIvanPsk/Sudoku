@@ -18,8 +18,7 @@ public class SudokuModel extends AppCompatActivity {
 
     public static boolean setVal(int row, int col, int value) {
         int prev_value = sudoku[row][col];
-        System.out.println("IS CORRECT -> " + isCorret(row, col));
-        /*
+
         if (sudoku[row][col] != solvedSudoku[row][col]){
             sudoku[row][col] = prev_value;
             return false;
@@ -27,8 +26,6 @@ public class SudokuModel extends AppCompatActivity {
             sudoku[row][col] = value;
             return true;
         }
-         */
-        return true;
     }
 
     public static int[][] generateSudoku(){

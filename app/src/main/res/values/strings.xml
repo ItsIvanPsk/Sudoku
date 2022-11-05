@@ -18,5 +18,6 @@
 
     <item name="row" type="id" />
     <item name="col" type="id" />
+    <item name="bug" type="id" />
 
 </resources>
