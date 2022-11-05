@@ -1,6 +1,9 @@
 <resources>
     <string name="app_name">Sudoku</string>
     <string name="sudoku__label__generate">Generate another sudoku</string>
+    <string name="start">New Sudoku</string>
+    <string name="cancel">Cancel</string>
+    <string name="generateNew">Do you want to generate another sudoku?</string>
     <string-array name="numbers">
         <item>1</item>
         <item>2</item>

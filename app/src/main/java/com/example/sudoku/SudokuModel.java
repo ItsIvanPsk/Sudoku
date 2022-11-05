@@ -9,6 +9,7 @@ import java.util.Random;
 public class SudokuModel extends AppCompatActivity {
 
     static int[][] sudoku = new int[9][9];
+    static int[][] solvedSudoku = new int[9][9];
     private static int[] num = { 1, 2, 3, 4, 5, 6, 7, 8, 9 };
 
     public static int getVal(int row, int col){
@@ -18,16 +19,20 @@ public class SudokuModel extends AppCompatActivity {
     public static boolean setVal(int row, int col, int value) {
         int prev_value = sudoku[row][col];
         System.out.println("IS CORRECT -> " + isCorret(row, col));
-        if (isCorret(row, col)){
+        /*
+        if (sudoku[row][col] != solvedSudoku[row][col]){
             sudoku[row][col] = prev_value;
             return false;
         } else {
             sudoku[row][col] = value;
             return true;
         }
+         */
+        return true;
     }
 
-    public static void generateShuDu(){
+    public static int[][] generateSudoku(){
+        sudoku = new int[9][9];
         for (int i = 0; i < 9; i++) {
             int time = 0;
             for (int j = 0; j < 9; j++) {
@@ -51,6 +56,20 @@ public class SudokuModel extends AppCompatActivity {
             }
         }
         Log.i("55555", "The sudoku has been generated!");
+        return sudoku;
+    }
+
+    public void genStartSudoku(){
+        solvedSudoku = generateSudoku();
+        int cantSolved = 80;
+
+        for (int j = 0; j < cantSolved; j++) {
+            int r = (int) (Math.random() * 9);
+            int c = (int) (Math.random() * 9);
+
+            sudoku[r][c] = 0;
+
+        }
     }
 
     private static boolean isCorret(int row, int col) {

@@ -1,18 +1,15 @@
 package com.example.sudoku;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.DialogInterface;
 import android.graphics.Color;
-import android.os.Build;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.GridLayout;
-import android.widget.LinearLayout;
-import android.widget.Space;
 import android.widget.Spinner;
 import android.widget.TableLayout;
 import android.widget.TableRow;
@@ -31,7 +28,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
     static ArrayList<String> spinnerArray = new ArrayList<String>();
     static  Spinner[][] spinners = new Spinner[9][9];
     SudokuModel sm = new SudokuModel();
-
+    AlertDialog.Builder builder;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -41,15 +38,33 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         Button btn = findViewById(R.id.sudoku__button_regen);
 
         fillNumbers();
-        sm.generateShuDu();
+        sm.genStartSudoku();
         createTable();
 
         btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Log.i("55", "regenerated!");
-                sm.generateShuDu();
-                refrescaGUI();
+                System.out.println("pressed!");
+
+                AlertDialog alertDialog = new AlertDialog.Builder(MainActivity.this).create();
+                alertDialog.setTitle("Sudoku");
+                alertDialog.setMessage("Do you wanna generate another sudoku?");
+
+                alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, "YES", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        refreshSpinners();
+                        sm.genStartSudoku();
+                        refrescaGUI();
+                    }
+                });
+
+                alertDialog.setButton(AlertDialog.BUTTON_NEGATIVE, "NO", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        alertDialog.cancel();
+                    }
+                });
+
+                alertDialog.show();
             }
         });
 
@@ -119,17 +134,13 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
                         (int) adapterView.getTag(R.id.col),
                         Integer.parseInt(adapterView.getSelectedItem().toString())
                 )){
-                    genToast("Correct number");
+                    Toast.makeText(getApplicationContext(), "Correct number", Toast.LENGTH_LONG).show();
                 } else {
-                    genToast("Incorrect number");
+                    Toast.makeText(getApplicationContext(), "Incorrect number", Toast.LENGTH_LONG).show();
                 }
                 refrescaGUI();
-            }
+            } else { adapterView.setSelection(0); }
         }
-    }
-
-    public void genToast(String message) {
-        Toast.makeText(getApplicationContext(), message.toString(), Toast.LENGTH_LONG).show();
     }
 
     @Override
@@ -140,9 +151,23 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
     public void refrescaGUI(){
         for(int i = 0; i < 9;i++){
             for(int j = 0; j < 9;j++){
-                Integer num = sm.getVal(i, j);
                 spinners[i][j].setSelection(sm.getVal(i, j));
-                // spinners[i][j].setEnabled(false);
+                if(sm.getVal(i, j) != 0) {
+                    spinners[i][j].setEnabled(false);
+                    spinners[i][j].setBackgroundColor(Color.LTGRAY);
+                } else {
+                    spinners[i][j].setEnabled(true);
+                }
+            }
+        }
+    }
+
+    public void refreshSpinners(){
+        for(int i = 0; i < 9;i++){
+            for(int j = 0; j < 9;j++){
+                spinners[i][j].setBackgroundColor(Color.LTGRAY);
+                spinners[i][j].setBackgroundResource(R.drawable.customborder);
+                spinners[i][j].setEnabled(true);
             }
         }
     }
