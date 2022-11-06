@@ -1,23 +1,12 @@
 <resources>
+
     <string name="app_name">Sudoku</string>
-    <string name="sudoku__label__generate">Generate another sudoku</string>
-    <string name="start">New Sudoku</string>
-    <string name="cancel">Cancel</string>
-    <string name="generateNew">Do you want to generate another sudoku?</string>
-    <string-array name="numbers">
-        <item>1</item>
-        <item>2</item>
-        <item>3</item>
-        <item>4</item>
-        <item>5</item>
-        <item>6</item>
-        <item>7</item>
-        <item>8</item>
-        <item>9</item>
-    </string-array>
+    <string name="sudoku__label__goMainMenu">Go Main Menu</string>
+    <string name="alert_y">YES</string>
+    <string name="alert_b">NO</string>
+    <string name="generateNew">Do you wanna go main menu?</string>
 
     <item name="row" type="id" />
     <item name="col" type="id" />
-    <item name="bug" type="id" />
 
 </resources>

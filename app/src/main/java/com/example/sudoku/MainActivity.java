@@ -15,12 +15,22 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        Button btn = findViewById(R.id.play_btn);
-        btn.setOnClickListener(new View.OnClickListener() {
+        Button play_button = findViewById(R.id.play_btn);
+        Button exit_button = findViewById(R.id.exit);
+
+        play_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(this, Sudoku.class);
-                startActivity(intent);
+                Intent myIntent = new Intent(MainActivity.this, Sudoku.class);
+                startActivity(myIntent);
+            }
+        });
+
+        exit_button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                finish();
+                System.exit(0);
             }
         });
 

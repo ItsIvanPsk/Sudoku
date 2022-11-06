@@ -4,6 +4,7 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.view.View;
@@ -45,13 +46,12 @@ public class Sudoku extends AppCompatActivity implements AdapterView.OnItemSelec
 
                 AlertDialog alertDialog = new AlertDialog.Builder(Sudoku.this).create();
                 alertDialog.setTitle("Sudoku");
-                alertDialog.setMessage("Do you wanna generate another sudoku?");
+                alertDialog.setMessage("Do you wanna go to the main menu?");
 
                 alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, "YES", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
-                        refreshSpinners();
-                        sm.genStartSudoku();
-                        refrescaGUI();
+                        Intent myIntent = new Intent(Sudoku.this, MainActivity.class);
+                        startActivity(myIntent);
                     }
                 });
 
@@ -151,26 +151,15 @@ public class Sudoku extends AppCompatActivity implements AdapterView.OnItemSelec
     public void refrescaGUI(){
         for(int i = 0; i < 9;i++){
             for(int j = 0; j < 9;j++){
-                spinners[i][j].setSelection(sm.getVal(i, j));
-                if(sm.getVal(i, j) != 0) {
-                    spinners[i][j].setEnabled(false);
-                    spinners[i][j].setBackgroundColor(Color.LTGRAY);
-                } else {
-                    spinners[i][j].setEnabled(true);
+                if ( sm.getVal(i,j) != 0 ) {
+                    spinners[i][j].setSelection(sm.getVal(i, j));
                 }
             }
         }
     }
 
-    public void refreshSpinners(){
-        for(int i = 0; i < 9;i++){
-            for(int j = 0; j < 9;j++){
-                spinners[i][j].setBackgroundColor(Color.LTGRAY);
-                spinners[i][j].setBackgroundResource(R.drawable.customborder);
-                spinners[i][j].setEnabled(true);
-                spinners[i][j].setTag("bug init");
-            }
-        }
+    public void initialDisable() {
+        
     }
 
 }
