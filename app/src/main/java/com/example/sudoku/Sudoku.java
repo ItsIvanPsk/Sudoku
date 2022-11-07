@@ -143,6 +143,7 @@ public class Sudoku extends AppCompatActivity implements AdapterView.OnItemSelec
                 ) ){
                     Toast.makeText(getApplicationContext(), "Correct number", Toast.LENGTH_LONG).show();
                     if ( sm.checkSudoku() ) {
+                        /*
                         AlertDialog alertDialog = new AlertDialog.Builder(Sudoku.this).create();
                         alertDialog.setTitle("Sudoku");
                         alertDialog.setMessage("Congratulations!!\nPress the button to go to the main menu.");
@@ -155,6 +156,7 @@ public class Sudoku extends AppCompatActivity implements AdapterView.OnItemSelec
                         });
 
                         alertDialog.show();
+                         */
                     }
                 } else {
 
@@ -198,11 +200,8 @@ public class Sudoku extends AppCompatActivity implements AdapterView.OnItemSelec
                                 alertDialog.cancel();
                             }
                         });
-
                         alertDialog.show();
                     }
-
-
                 }
                 refrescaGUI();
             } else {
