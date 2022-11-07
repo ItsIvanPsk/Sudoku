@@ -1,16 +1,21 @@
 package com.example.sudoku;
 
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
+import android.graphics.drawable.Drawable;
+import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TableLayout;
 import android.widget.TableRow;
@@ -23,6 +28,10 @@ public class Sudoku extends AppCompatActivity implements AdapterView.OnItemSelec
     int cols = 9;
     int rows = 9;
     TableLayout table;
+    int start_hearth = 5;
+    static ArrayList<ImageView> hearth_vr;
+    static int actual_hearth = 5;
+
     static ArrayList<String> spinnerArray = new ArrayList<String>();
     static  Spinner[][] spinners = new Spinner[9][9];
     SudokuModel sm = new SudokuModel();
@@ -119,21 +128,81 @@ public class Sudoku extends AppCompatActivity implements AdapterView.OnItemSelec
         refrescaGUI();
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.M)
     @Override
     public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
         if (adapterView.getTag().equals("bug init")) {
-            adapterView.setTag("bug init");
+            adapterView.setTag("bug resolved");
         }
         else {
-            if (!(adapterView.getSelectedItem().toString() == " ")){
+            if (!(adapterView.getSelectedItem().toString().equals(" "))){
                 if ( sm.setVal(
                         (int) adapterView.getTag(R.id.row),
                         (int) adapterView.getTag(R.id.col),
                         Integer.parseInt(adapterView.getSelectedItem().toString())
-                )){
+                ) ){
                     Toast.makeText(getApplicationContext(), "Correct number", Toast.LENGTH_LONG).show();
+                    if ( sm.checkSudoku() ) {
+                        AlertDialog alertDialog = new AlertDialog.Builder(Sudoku.this).create();
+                        alertDialog.setTitle("Sudoku");
+                        alertDialog.setMessage("Congratulations!!\nPress the button to go to the main menu.");
+
+                        alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, "Go Main Menu", new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int which) {
+                                Intent myIntent = new Intent(Sudoku.this, MainActivity.class);
+                                startActivity(myIntent);
+                            }
+                        });
+
+                        alertDialog.show();
+                    }
                 } else {
-                    Toast.makeText(getApplicationContext(), "Incorrect number", Toast.LENGTH_LONG).show();
+
+                    actual_hearth--;
+                    if (actual_hearth == 0) {
+                        AlertDialog alertDialog = new AlertDialog.Builder(Sudoku.this).create();
+                        alertDialog.setTitle("Sudoku");
+                        alertDialog.setMessage("You lose, return to the main menu and play again!");
+
+                        alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, "Go Main Menu", new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int which) {
+                                Intent myIntent = new Intent(Sudoku.this, MainActivity.class);
+                                startActivity(myIntent);
+                            }
+                        });
+
+                        alertDialog.show();
+                    } else {
+                        System.out.println(actual_hearth);
+                        switch (actual_hearth) {
+                            case 1:
+                                findViewById(R.id.hearth_2).setVisibility(View.INVISIBLE);
+                                break;
+                            case 2:
+                                findViewById(R.id.hearth_3).setVisibility(View.INVISIBLE);
+                                break;
+                            case 3:
+                                findViewById(R.id.hearth_4).setVisibility(View.INVISIBLE);
+                                break;
+                            case 4:
+                                findViewById(R.id.hearth_5).setVisibility(View.INVISIBLE);
+                                break;
+                        }
+
+                        AlertDialog alertDialog = new AlertDialog.Builder(Sudoku.this).create();
+                        alertDialog.setTitle("Sudoku");
+                        alertDialog.setMessage("Incorrect number!!");
+
+                        alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, "Okay", new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int which) {
+                                alertDialog.cancel();
+                            }
+                        });
+
+                        alertDialog.show();
+                    }
+
+
                 }
                 refrescaGUI();
             } else {
@@ -151,9 +220,7 @@ public class Sudoku extends AppCompatActivity implements AdapterView.OnItemSelec
     public void refrescaGUI(){
         for(int i = 0; i < 9;i++){
             for(int j = 0; j < 9;j++){
-                if ( sm.getVal(i,j) != 0 ) {
-                    spinners[i][j].setSelection(sm.getVal(i, j));
-                }
+                spinners[i][j].setSelection(sm.getVal(i, j));
             }
         }
     }

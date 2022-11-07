@@ -1,8 +1,7 @@
 package com.example.sudoku;
 
-import android.util.Log;
-
 import androidx.appcompat.app.AppCompatActivity;
+
 
 import java.util.Random;
 
@@ -18,6 +17,9 @@ public class SudokuModel extends AppCompatActivity {
 
     public static boolean setVal(int row, int col, int value) {
         int prev_value = sudoku[row][col];
+        sudoku[row][col] = value;
+        System.out.println("Sudoku: " + sudoku[row][col]);
+        System.out.println("Solved Sudoku: " + solvedSudoku[row][col]);
 
         if (sudoku[row][col] != solvedSudoku[row][col]){
             sudoku[row][col] = prev_value;
@@ -26,6 +28,19 @@ public class SudokuModel extends AppCompatActivity {
             sudoku[row][col] = value;
             return true;
         }
+    }
+
+    public boolean checkSudoku(){
+        boolean isFullyCorrect = true;
+        for (int i = 0; i < 9; i++) {
+            for (int j = 0; j < 9; j++) {
+                if(!isCorret(i,j)){
+                    isFullyCorrect = false;
+                    break;
+                }
+            }
+        }
+        return isFullyCorrect;
     }
 
     public static int[][] generateSudoku(){
@@ -52,20 +67,24 @@ public class SudokuModel extends AppCompatActivity {
                 }
             }
         }
-        Log.i("55555", "The sudoku has been generated!");
+
+        for (int i = 0; i < 9; i++) {
+            for (int j = 0; j < 9; j++) {
+                solvedSudoku[i][j] = sudoku[i][j];
+            }
+        }
+
         return sudoku;
     }
 
     public void genStartSudoku(){
-        solvedSudoku = generateSudoku();
+        generateSudoku();
         int cantSolved = 80;
 
         for (int j = 0; j < cantSolved; j++) {
             int r = (int) (Math.random() * 9);
             int c = (int) (Math.random() * 9);
-
             sudoku[r][c] = 0;
-
         }
     }
 
