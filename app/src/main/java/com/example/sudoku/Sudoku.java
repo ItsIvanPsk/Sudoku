@@ -47,6 +47,7 @@ public class Sudoku extends AppCompatActivity implements AdapterView.OnItemSelec
         fillNumbers();
         sm.genStartSudoku();
         createTable();
+        refrescaGUI();
 
         btn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -121,7 +122,6 @@ public class Sudoku extends AppCompatActivity implements AdapterView.OnItemSelec
                 }
                 spinners[row][col] = spinner;
                 tr.addView(spinner);
-
             }
             table.addView(tr);
         }
@@ -219,7 +219,13 @@ public class Sudoku extends AppCompatActivity implements AdapterView.OnItemSelec
     public void refrescaGUI(){
         for(int i = 0; i < 9;i++){
             for(int j = 0; j < 9;j++){
-                spinners[i][j].setSelection(sm.getVal(i, j));
+                if(spinners[i][j].getSelectedItem() != " "){
+                    spinners[i][j].setSelection(sm.getVal(i, j));
+                    spinners[i][j].setEnabled(false);
+                } else {
+                    spinners[i][j].setSelection(sm.getVal(i, j));
+                    spinners[i][j].setEnabled(true);
+                }
             }
         }
     }
